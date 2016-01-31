@@ -128,7 +128,7 @@
                             <outputDirectory> ${project.build.directory}/${project.build.finalName}/WEB-INF/lib
                             </outputDirectory>
                             <descriptors>
-                                <descriptor>src/main/assembly/jar.xml</descriptor>
+                                <descriptor>src/assembly/jar.xml</descriptor>
                             </descriptors>
                         </configuration>
                     </execution>
