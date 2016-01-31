@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<decorators defaultdir="/WEB-INF/layouts/">
+
+	<excludes>
+		   <!-- 不走布局的页面 静态资源 文本编辑器 api -->
+           <pattern>/static/*</pattern>
+           <pattern>/kindeditor/*</pattern>
+           <pattern>/api/*</pattern>
+           <!-- ajax返回html -->
+           <pattern>/*/ajax/*</pattern>
+           <!-- 剔除后台iframe布局的路径 -->
+           <pattern>/admin</pattern>
+           <pattern>/admin/</pattern>
+           <!-- 样式与百度地图冲突  拦截掉 -->
+           <pattern>/front/baiduMap</pattern>
+    </excludes>
+    
+    <!-- edu前端布局 -->
+    <decorator name="edudefault" page="default.jsp">
+       <pattern>/front/*/*</pattern>
+       <pattern>/front/*</pattern>
+    </decorator> 
+</decorators>

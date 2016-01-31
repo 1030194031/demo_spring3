@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TemplateMapper">
+
+	<resultMap id="TemplateResult" type="Template">
+		<result property="id" column="id" />
+		<result property="content" column="content" />
+	</resultMap>
+
+
+	<sql id="template_columns">
+		template.id,
+		template.content
+	</sql>
+
+	<sql id="template_properties">
+		#{id},
+		#{content}
+	</sql>
+	
+	<!-- 创建上传信息 -->
+	<insert id="createTemplate" parameterType="Template" keyColumn="id"
+		keyProperty="id" useGeneratedKeys="true">
+		insert into template (<include refid="template_columns" />)
+		values (<include refid="template_properties" />)
+	</insert>
+	
+	<!-- 修改模板信息 -->
+	<update id="updateTemplate" parameterType="Template">
+		update template set
+		content=#{content}
+		where id=#{id}
+	</update>
+	
+	<!-- 根据id查询文件信息 -->
+	<select id="getTemplateById" resultMap="TemplateResult" parameterType="Long">
+		select
+		<include refid="template_columns" />
+		from template
+		where
+		id = #{value}
+	</select>
+	
+</mapper>

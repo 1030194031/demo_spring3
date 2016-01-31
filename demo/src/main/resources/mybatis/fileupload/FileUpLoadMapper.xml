@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="FileUpLoadMapper">
+
+	<resultMap id="FileUpLoadResult" type="FileUpLoad">
+		<result property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="createTime" column="create_time"/>
+		<result property="url" column="url"/>
+	</resultMap>
+
+
+	<sql id="fileupload_columns">
+		fileupload.id,
+		fileupload.name,
+		fileupload.create_time,
+		fileupload.url
+	</sql>
+
+	<sql id="fileupload_properties">
+		#{id},
+		#{name},
+		#{createTime},
+		#{url}
+	</sql>
+	
+	<!-- 创建上传信息 -->
+	<insert id="createFileUpLoad" parameterType="FileUpLoad" keyColumn="id"
+		keyProperty="id" useGeneratedKeys="true">
+		insert into fileupload (<include refid="fileupload_columns" />)
+		values (<include refid="fileupload_properties" />)
+	</insert>
+	
+	<!-- 删除上传信息 -->
+	<delete id="deleteFileUpLoadById" parameterType="String">
+		delete from fileupload
+		where
+		id in(${value})
+	</delete>
+	
+	<!-- 根据id查询文件信息 -->
+	<select id="getFileUpLoadById" resultMap="FileUpLoadResult" parameterType="Long">
+		select
+		<include refid="fileupload_columns" />
+		from fileupload
+		where
+		id = #{value}
+	</select>
+	
+	<!-- 根据条件查询用户列表 -->
+	<select id="getFileUpLoadList" parameterType="QueryFileUpLoad" resultMap="FileUpLoadResult">
+		select <include refid="fileupload_columns"/>
+		from fileupload
+		where 1=1
+		<if test="name!=null and name!=''">
+			and name like concat('%',#{name},'%')
+		</if>
+		order by create_time desc
+	</select>
+</mapper>

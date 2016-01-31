@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+ 
+	<settings>
+		<!-- 关闭懒加载 -->
+        <setting name="lazyLoadingEnabled" value="false"/>
+        <!-- 关闭缓存 -->
+        <setting name="cacheEnabled" value="false"/>
+    </settings>
+     
+	<typeAliases>
+		<!-- 所有用到的实体类无需填写 -->
+	</typeAliases>
+
+	<!-- Mapper.xml无需挨个引入，全部命名规范：以Mapper.xml结尾会自动引入  如：publicMapper.xm-->
+	
+</configuration>

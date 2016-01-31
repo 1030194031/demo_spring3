@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserMapper">
+
+	<resultMap id="UserResult" type="User">
+		<result property="id" column="id" />
+		<result property="nickname" column="nickname" />
+		<result property="pic" column="pic"/>
+		<result property="content" column="content"/>
+	</resultMap>
+
+
+	<sql id="user_columns">
+		user_user.id,
+		user_user.nickname,
+		user_user.pic,
+		user_user.content
+	</sql>
+
+	<sql id="user_properties">
+		#{id},
+		#{nickname},
+		#{pic},
+		#{content}
+	</sql>
+	
+	<!-- 添加user -->
+	<insert id="createUser" parameterType="User" keyColumn="id"
+		keyProperty="id" useGeneratedKeys="true">
+		insert into user_user (<include refid="user_columns" />)
+		values (<include refid="user_properties" />)
+	</insert>
+	
+	<!-- 删除user -->
+	<delete id="deleteUserById" parameterType="String">
+		delete from user_user
+		where
+		id in(${value})
+	</delete>
+	
+	<!-- 修改user -->
+	<update id="updateUser" parameterType="User">
+		update
+		user_user SET
+		nickname = #{nickname},
+		pic=#{pic},
+		content=#{content}
+		where
+		id =#{id}
+	</update>
+	
+	<!-- 根据id查询user -->
+	<select id="getUserById" resultMap="UserResult" parameterType="Long">
+		select
+		<include refid="user_columns" />
+		from user_user
+		where
+		id = #{value}
+	</select>
+	
+	<!-- 根据条件查询用户列表 -->
+	<select id="getUserList" parameterType="QueryUser" resultMap="UserResult">
+		select <include refid="user_columns"/>
+		from user_user
+		where 1=1
+		<if test="nickname!=null and nickname!=''">
+			and nickname like concat('%',#{nickname},'%')
+		</if>
+		order by id desc
+	</select>
+	
+	<!-- 根据条件查询用户列表 -->
+	<select id="getUserListByIds" parameterType="String" resultMap="UserResult">
+		select <include refid="user_columns"/>
+		from user_user
+		where id in (${value})
+	</select>
+	
+	<!-- 分页查询用户 -->
+	<select id="queryUserPage" parameterType="java.util.Map" resultMap="UserResult">
+		select <include refid="user_columns"/>
+		from user_user
+		where 1=1
+		<if test="e.nickname!=null and e.nickname!=''">
+			and nickname like concat('%',#{e.nickname},'%')
+		</if>
+		order by id desc
+		<include refid="publicMapper.pageEnd"/>  
+	</select>
+	<select id="queryUserPageCount" parameterType="java.util.Map" resultType="int">
+		select count(1)
+		from user_user
+		where 1=1
+		<if test="e.nickname!=null and e.nickname!=''">
+			and nickname like concat('%',#{e.nickname},'%')
+		</if>
+	</select>
+</mapper>
