@@ -180,7 +180,7 @@ public class FrontController extends BaseController {
 			json=this.getJsonMap(true, null, result);
 		} catch (Exception e) {
 			logger.error("FrontController.getJoke---error",e);
-			json=this.getJsonMap(false, null, null);
+			json =this.getJsonMap(false, null, null);
 		}
 		return json;
 	}
