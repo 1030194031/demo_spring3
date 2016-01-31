@@ -177,10 +177,10 @@ public class FrontController extends BaseController {
 			map.put("page","");
 			String result= HttpHalder.postMethod("http://route.showapi.com/341-2",map);
 			System.out.println(result);
-			this.getJsonMap(true, null, result);
+			json=this.getJsonMap(true, null, result);
 		} catch (Exception e) {
 			logger.error("FrontController.getJoke---error",e);
-			this.getJsonMap(false, null, null);
+			json=this.getJsonMap(false, null, null);
 		}
 		return json;
 	}
