@@ -29,107 +29,111 @@ import java.util.Map;
 
 /**
  * @author Administrator
- * 2015-5-5
+ *         2015-5-5
  */
-@Controller 
+@Controller
 @RequestMapping("/front")
-public class TemplateController extends BaseController{
-	private static final long serialVersionUID = 1L;
+public class TemplateController extends BaseController {
+    private static final long serialVersionUID = 1L;
 
-	protected final Logger logger = LoggerFactory.getLogger(this.getClass());  
-	
-	private String template="/WEB-INF/view/template/template";
-	
-	@Autowired
-	private TemplateService templateService;
-	@Autowired
-	private UserService userService;
-	
-	// 绑定变量名参数(作用:将页面提交的属性与实体想关联)
-	@InitBinder("template")
-	public void initBinderTemplate(HttpServletRequest request, ServletRequestDataBinder binder) {
-		binder.setFieldDefaultPrefix("template.");
-	}
-	
-	/**
-	 * 跳转模板页面
-	 * @return
-	 */
-	@RequestMapping("/template")
-	public ModelAndView to_template(){
-		ModelAndView model=new ModelAndView(template);
-		try {
-			Template template=templateService.getTemplateById(1L);
-			model.addObject("template",template);
-		} catch (Exception e) {
-			// TODO: handle exception
-			logger.error("TemplateController.to_template",e);
-		}
-		return model;
-	}
-	
-	/**
-	 * 修改模板文件
-	 * @param template
-	 * @return
-	 */
-	@RequestMapping("/updateTemplate")
-	public ModelAndView updateTemplate(@ModelAttribute("template") Template template){
-		ModelAndView model=new ModelAndView("redirect:/front/template");
-		try {
-			if(template!=null){
-				templateService.updateTemplate(template);
-				String tempDir =CommonConstants.templatepath+File.separator+"template";
-				TemplateUtil.createTemplateFile(template.getContent(), tempDir);
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-			logger.error("TemplateController.updateTemplate",e);
-		}
-		return model;
-	}
-	
-	/**
-	 * 发布模板
-	 * @return
-	 */
-	@RequestMapping("/pubVelocity")
-	@ResponseBody
-	public Map<String,Object> pubVelocity(){
-		Map<String,Object> json=null;
-		try {
-			VelocityContext context=new VelocityContext();
-			context.put("ctx",CommonConstants.contextPath);
-			context.put("userService",userService);
-			
-			publishIndex(context);
-			this.getJsonMap(true, "发布成功", null);
-		} catch (Exception e) {
-			this.getJsonMap(false, "", null);
-			logger.error("",e);
-		}
-		return json;
-	}
-	
-	/**
-	 * 发布模板提取方法
-	 * @param context
-	 * @return
-	 * @throws Exception
-	 */
-	private String publishIndex(VelocityContext context) throws Exception{
-		//模板路径
-		String tempFile="/template.vm";
-		String file=CommonConstants.htmlfilepath+File.separator+"index.html";
-		File filePath=new File(file);
-		if(!filePath.getParentFile().exists()){
-			filePath.getParentFile().mkdirs();
-		}
-		VelocityEngine engine = TemplateUtil.initEngine(CommonConstants.templatepath);
-		boolean isOk= TemplateUtil.createHtmlFile(engine,tempFile,filePath,context);
-		if(isOk==false){
-			throw new ArithmeticException("dvided with number 0.");
-		}
-		return tempFile;
-	}
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    private String template = "/WEB-INF/view/template/template";
+
+    @Autowired
+    private TemplateService templateService;
+    @Autowired
+    private UserService userService;
+
+    // 绑定变量名参数(作用:将页面提交的属性与实体想关联)
+    @InitBinder("template")
+    public void initBinderTemplate(HttpServletRequest request, ServletRequestDataBinder binder) {
+        binder.setFieldDefaultPrefix("template.");
+    }
+
+    /**
+     * 跳转模板页面
+     *
+     * @return
+     */
+    @RequestMapping("/template")
+    public ModelAndView to_template() {
+        ModelAndView model = new ModelAndView(template);
+        try {
+            Template template = templateService.getTemplateById(1L);
+            model.addObject("template", template);
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.error("TemplateController.to_template", e);
+        }
+        return model;
+    }
+
+    /**
+     * 修改模板文件
+     *
+     * @param template
+     * @return
+     */
+    @RequestMapping("/updateTemplate")
+    public ModelAndView updateTemplate(@ModelAttribute("template") Template template) {
+        ModelAndView model = new ModelAndView("redirect:/front/template");
+        try {
+            if (template != null) {
+                templateService.updateTemplate(template);
+                String tempDir = CommonConstants.templatepath + File.separator + "template";
+                TemplateUtil.createTemplateFile(template.getContent(), tempDir);
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.error("TemplateController.updateTemplate", e);
+        }
+        return model;
+    }
+
+    /**
+     * 发布模板
+     *
+     * @return
+     */
+    @RequestMapping("/pubVelocity")
+    @ResponseBody
+    public Map<String, Object> pubVelocity() {
+        Map<String, Object> json = null;
+        try {
+            VelocityContext context = new VelocityContext();
+            context.put("ctx", CommonConstants.contextPath);
+            context.put("userService", userService);
+
+            publishIndex(context);
+            json = this.getJsonMap(true, "发布成功", null);
+        } catch (Exception e) {
+            json = this.getJsonMap(false, "", null);
+            logger.error("", e);
+        }
+        return json;
+    }
+
+    /**
+     * 发布模板提取方法
+     *
+     * @param context
+     * @return
+     * @throws Exception
+     */
+    private String publishIndex(VelocityContext context) throws Exception {
+        //模板路径
+        String tempFile = "/template.vm";
+        String file = CommonConstants.htmlfilepath + File.separator + "index.html";
+        File filePath = new File(file);
+        if (!filePath.getParentFile().exists()) {
+            filePath.getParentFile().mkdirs();
+        }
+        VelocityEngine engine = TemplateUtil.initEngine(CommonConstants.templatepath);
+        boolean isOk = TemplateUtil.createHtmlFile(engine, tempFile, filePath, context);
+        if (isOk == false) {
+            throw new ArithmeticException("dvided with number 0.");
+        }
+        return tempFile;
+    }
 }
